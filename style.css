@@ -1,0 +1,442 @@
+:root {
+    --bg-color: #0d1117;
+    --text-color: #e6e6e6;
+    --accent-color: #D4AF37;
+    /* Gold */
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+}
+
+.content-container {
+    position: relative;
+    width: 100%;
+}
+
+.bg-img {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1s ease;
+    z-index: -3;
+    /* Behind canvas (-2) */
+    filter: brightness(0.7);
+    /* Darken slightly but keep visible */
+}
+
+.bg-img.active {
+    opacity: 1;
+}
+
+#bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    /* Behind the SVG path (z-index -1) */
+}
+
+/* Dynamic SVG Overlay */
+svg#motionPath {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* Height set by JS */
+    z-index: 5;
+    pointer-events: none;
+}
+
+#path {
+    stroke: rgba(212, 175, 55, 0.4);
+    stroke-width: 4px;
+    fill: none;
+    stroke-linecap: round;
+}
+
+#tracker {
+    transform-origin: center;
+    pointer-events: none;
+    will-change: transform;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+    /* Floating effect */
+}
+
+#tracker-text {
+    font-family: var(--font-body);
+    font-size: 24px;
+    font-weight: 700;
+    fill: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    /* Hidden by default */
+}
+
+section {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    position: relative;
+    z-index: 10;
+}
+
+/* Intro Section Refactor */
+.intro {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5%;
+}
+
+.intro-layout {
+    display: flex;
+    justify-content: center;
+    /* Center horizontally */
+    align-items: center;
+    width: 100%;
+    max-width: 1400px;
+    gap: 4rem;
+    flex-wrap: wrap;
+}
+
+/* Left Column (Now Centered) */
+.intro-left {
+    flex: 1;
+    min-width: 300px;
+    text-align: center;
+    /* Center text */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Center align items */
+}
+
+.intro-left h3 {
+    color: #4da6ff;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.main-logo {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+}
+
+.fifty-years-img {
+    width: 100%;
+    max-width: 200px;
+    /* Adjust size as needed */
+    height: auto;
+    margin-bottom: 2rem;
+    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
+    /* Gold glow */
+}
+
+.intro-desc {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #ddd;
+    text-align: justify;
+    /* Create neat block edges */
+    text-align-last: center;
+    /* Ensure last line is centered */
+    max-width: 700px;
+    /* Slightly narrower for better block shape */
+}
+
+/* Scroll Indicator */
+.scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.8;
+    animation: bounce 2s infinite;
+}
+
+.scroll-text {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #a0c0e0;
+    /* Light blueish grey */
+}
+
+.scroll-line {
+    width: 2px;
+    height: 40px;
+    background-color: #4da6ff;
+    /* Blue accent */
+}
+
+@keyframes bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    40% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+
+    60% {
+        transform: translateX(-50%) translateY(-5px);
+    }
+}
+
+/* Right Column - Group Companies Card */
+.intro-right {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    justify-content: center;
+}
+
+.group-companies-card {
+    background: linear-gradient(135deg, #2b72b5 0%, #1e5a96 100%);
+    /* Blue gradient */
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 500px;
+    /* Initial state for animation */
+    opacity: 0;
+    transform: translateX(50px);
+}
+
+.group-companies-card h3 {
+    color: #fff;
+    text-align: right;
+    /* As per image "GROUP COMPANIES" aligned right? Or center? Image shows right aligned relative to card title area, let's Center it for safety then Right if needed. Actually Image shows it on top right.*/
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 1rem;
+}
+
+.group-companies-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.group-companies-card ul li {
+    background: #fff;
+    color: #1e5a96;
+    /* Blue text */
+    padding: 0.8rem 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 4px;
+    /* Slight round */
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    transition: transform 0.3s ease;
+    cursor: default;
+}
+
+.group-companies-card ul li:hover {
+    transform: translateX(10px);
+    /* Interactive feel */
+    background: #f0f8ff;
+}
+
+.highlight {
+    color: var(--accent-color);
+}
+
+/* Company Layouts */
+.company {
+    display: flex;
+    padding: 0 5%;
+}
+
+.company.left {
+    justify-content: flex-start;
+}
+
+.company.right {
+    justify-content: flex-end;
+}
+
+.company.centered {
+    justify-content: center;
+}
+
+.card {
+    background: linear-gradient(135deg, rgba(30, 30, 40, 0.7), rgba(20, 20, 30, 0.5));
+    padding: 3rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    max-width: 600px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Decorative top bar on card */
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--accent-color);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+}
+
+.card h2 {
+    font-family: var(--font-heading);
+    color: var(--text-color);
+    font-size: 2rem;
+    /* Slightly smaller to fit side-by-side */
+    margin-bottom: 0;
+    /* Handled by header gap/padding */
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    flex: 1;
+    /* Allow text to take space */
+}
+
+.card-logo-placeholder {
+    width: 60px;
+    height: 60px;
+    /* Removed background/border logic from placeholder itself to let image take over, 
+       but keeping a fallback/container style is good. 
+       Let's make it a clean container. */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0;
+    flex-shrink: 0;
+    overflow: hidden;
+    /* Ensures image stays inside circle */
+    background: #fff;
+    /* White bg for logos with transparency if any */
+    border: 2px solid var(--accent-color);
+}
+
+.company-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.btn:hover {
+    background: var(--accent-color);
+    color: #000;
+}
+
+/* Holdings section extra padding/height */
+#pricol-holdings-section {
+    min-height: 120vh;
+    /* Extended height */
+    padding-bottom: 10vh;
+}
+
+.footer {
+    min-height: 40vh;
+    /* Reduced min-height as it's below content now */
+    background: #000;
+    color: #555;
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    /* Stack vertically */
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    /* Space between logo and text */
+    padding-top: 5rem;
+    /* Ensure space from previous section/line */
+}
+
+.footer-logo {
+    width: 200px;
+    height: auto;
+    filter: brightness(0.8);
+    /* Slightly dimmed if needed, or remove for full brightness */
+}
+
+@media (max-width: 768px) {
+    .text-block h1 {
+        font-size: 2.5rem;
+    }
+
+    .company {
+        justify-content: center !important;
+    }
+
+    .card {
+        width: 100%;
+        max-width: 100%;
+    }
+}

@@ -45,6 +45,12 @@ body {
     opacity: 1;
 }
 
+#bg-intro {
+    object-fit: contain;
+    background-color: #002250;
+    /* Custom Navy */
+}
+
 #bg-canvas {
     position: fixed;
     top: 0;

@@ -55,24 +55,20 @@ document.addEventListener("DOMContentLoaded", () => {
             // Center of the squared icon
             const iconOffset = size / 2;
 
-            // "slight up and right side" offset
-            // "slight up and right side" offset
-            let manualOffsetX = 7;
-            let manualOffsetY = -45;
+            // Start position: Center of the logo's icon area
+            startX = (logoRect.left - containerRect.left) + iconOffset;
+            startY = (logoRect.top - containerRect.top) + iconOffset;
 
-            // Adjust offsets for smaller screens to maintain visual alignment
+            // Optional: fine-tune start point if needed
+            let manualOffsetX = 0;
+            let manualOffsetY = 0;
+
             if (width < 768) {
-                // Mobile
-                manualOffsetX = 20;
-                manualOffsetY = -20;
-            } else if (width < 1200) {
-                // Tablet / Small Laptop: Center alignment
-                manualOffsetX = 0;
-                manualOffsetY = 0;
+                manualOffsetY = -10;
             }
 
-            startX = (logoRect.left - containerRect.left) + iconOffset + manualOffsetX;
-            startY = (logoRect.top - containerRect.top) + iconOffset + manualOffsetY;
+            startX += manualOffsetX;
+            startY += manualOffsetY;
         }
 
         const sections = document.querySelectorAll("section.company, section.footer, section#intro");
@@ -153,16 +149,19 @@ document.addEventListener("DOMContentLoaded", () => {
         // Tracker Text & Appearance Logic
         const trackerText = document.getElementById('tracker-text');
 
-        // Show Tracker Text when scrolling out of Intro
-        // Removed Main Logo fade to keep it visible ("show two images")
+        // Hide the entire Tracker (icon + text) while inside the Intro section
+        gsap.set('#tracker', { opacity: 0 }); // Initial state
+
         ScrollTrigger.create({
             trigger: ".intro",
             start: "top top",
             end: "bottom center",
             onLeave: () => {
+                gsap.to('#tracker', { opacity: 1, duration: 0.5 });
                 gsap.to('#tracker-text', { opacity: 1, duration: 0.5 });
             },
             onEnterBack: () => {
+                gsap.to('#tracker', { opacity: 0, duration: 0.5 });
                 gsap.to('#tracker-text', { opacity: 0, duration: 0.5 });
             }
         });

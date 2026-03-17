@@ -45,10 +45,23 @@ body {
     opacity: 1;
 }
 
+#bg-image-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #002250; /* Navy background for the intro */
+    z-index: -4;
+}
+
 #bg-intro {
+    width: 250px;
+    height: auto;
+    max-height: 250px;
+    top: 40px;
+    left: 50px;
     object-fit: contain;
-    background-color: #002250;
-    /* Custom Navy */
 }
 
 #bg-canvas {
@@ -137,7 +150,8 @@ section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Center align items */
+    justify-content: center;
+    gap: 1.5rem; /* Better gap between text, logo, and desc */
 }
 
 .intro-left h3 {
@@ -149,11 +163,12 @@ section {
 }
 
 .main-logo {
-    width: 100%;
-    max-width: 400px;
+    width: 90%;
+    max-width: 450px;
     height: auto;
-    margin-bottom: 1rem;
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+    margin: 1rem 0;
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
 }
 
 .fifty-years-img {
@@ -444,5 +459,23 @@ section {
     .card {
         width: 100%;
         max-width: 100%;
+    }
+
+    .main-logo {
+        max-width: 280px;
+    }
+
+    .intro-left h3 {
+        font-size: 1.1rem;
+    }
+
+    .intro-desc {
+        font-size: 0.9rem;
+    }
+
+    #bg-intro {
+        width: 150px;
+        top: 20px;
+        left: 20px;
     }
 }
